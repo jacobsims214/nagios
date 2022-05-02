@@ -48,3 +48,19 @@ wait 2
 
 systemctl start nagios.service
 echo Nagios Started Please Browse to port 80 and confirm core install is working
+
+# starting plugin install
+yes | yum install -y gcc glibc glibc-common make gettext automake autoconf wget openssl-devel net-snmp net-snmp-utils epel-release
+yes | yum install -y perl-Net-SNMP
+# get the source
+cd /tmp
+wget --no-check-certificate -O nagios-plugins.tar.gz https://github.com/nagios-plugins/nagios-plugins/archive/release-2.3.3.tar.gz
+tar zxf nagios-plugins.tar.gz
+# build it
+cd /tmp/nagios-plugins-release-2.3.3/
+./tools/setup
+./configure
+yes | make
+yes | make install
+# restart nagios 
+systemctl restart nagios
